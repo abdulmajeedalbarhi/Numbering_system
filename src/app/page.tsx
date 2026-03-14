@@ -74,11 +74,18 @@ export default function Home() {
       const sorted = matches.sort((a: any, b: any) => a.id - b.id);
       const firstAvailable = sorted.find((b: any) => b.id > state.currentNumber) || sorted[sorted.length - 1];
       
+      // Count distinct bookings in front
+      const bookingsAhead = state.bookings.filter((b: any) => 
+        b.id > state.currentNumber && b.id < firstAvailable.id
+      );
+      const uniqueBookingsSet = new Set(bookingsAhead.map((b: any) => b.timestamp + b.phone));
+      const distinctPeopleInFront = uniqueBookingsSet.size;
+
       setSearchResult({
         name: sorted[0].name,
         ids: sorted.map((b: any) => b.id),
         firstId: firstAvailable.id,
-        peopleInFront: Math.max(0, firstAvailable.id - state.currentNumber - 1),
+        peopleInFront: distinctPeopleInFront,
         isDone: sorted.every((b: any) => b.id <= state.currentNumber)
       });
     } else {
@@ -152,7 +159,7 @@ export default function Home() {
             <p style={{ fontSize: '0.9rem' }}><strong>الأرقام:</strong> <span style={{ color: 'var(--primary)', fontWeight: 800 }}>{searchResult.ids.join(', ')}</span></p>
             {!searchResult.isDone && (
               <p style={{ fontSize: '1rem', marginTop: '0.5rem', borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '0.5rem' }}>
-                أمامك: <span style={{ color: 'var(--primary)', fontWeight: 900 }}>{searchResult.peopleInFront}</span> أشخاص
+                عدد الحجوزات أمامك: <span style={{ color: 'var(--primary)', fontWeight: 900 }}>{searchResult.peopleInFront}</span>
               </p>
             )}
           </div>
