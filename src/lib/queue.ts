@@ -44,26 +44,63 @@ export async function saveQueueState(state: QueueState): Promise<void> {
   }
 }
 
-export async function addBooking(name: string, phone: string, orders: number): Promise<Booking[] | null> {
+export async function addBooking(name: string, phone: string, orders: number, preferredIds?: number[]): Promise<Booking[] | null> {
   const state = await getQueueState();
   if (!state.isOpen) return null;
   
-  // Ensure we don't exceed max bookings with the total orders
-  if (state.bookings.length + orders > state.maxBookings) return null;
-
+  const existingIds = state.bookings.map(b => b.id);
   const newBookings: Booking[] = [];
-  for (let i = 0; i < orders; i++) {
-    const booking: Booking = {
-      id: state.lastBookingId + 1,
-      name,
-      phone,
-      orders: orders.toString(),
-      timestamp: new Date().toISOString(),
-    };
-    state.bookings.push(booking);
-    state.lastBookingId += 1;
-    newBookings.push(booking);
+  const timestamp = new Date().toISOString();
+
+  if (preferredIds && preferredIds.length === orders) {
+    // Validate preferred IDs
+    for (const id of preferredIds) {
+      if (id <= state.currentNumber || id > state.maxBookings || existingIds.includes(id)) {
+        return null; // Invalid ID selected
+      }
+    }
+    
+    for (const id of preferredIds) {
+      const booking: Booking = {
+        id,
+        name,
+        phone,
+        orders: orders.toString(),
+        timestamp,
+      };
+      state.bookings.push(booking);
+      newBookings.push(booking);
+      if (id > state.lastBookingId) state.lastBookingId = id;
+    }
+  } else {
+    // Sequential fallback
+    if (state.bookings.length + orders > state.maxBookings) return null;
+    
+    let nextId = state.lastBookingId + 1;
+    for (let i = 0; i < orders; i++) {
+      // Find the next truly available ID (skipping any that might have been manually picked)
+      while (existingIds.includes(nextId) || nextId <= state.currentNumber) {
+        nextId++;
+      }
+      
+      if (nextId > state.maxBookings) return null;
+
+      const booking: Booking = {
+        id: nextId,
+        name,
+        phone,
+        orders: orders.toString(),
+        timestamp,
+      };
+      state.bookings.push(booking);
+      newBookings.push(booking);
+      state.lastBookingId = nextId;
+      nextId++;
+    }
   }
+
+  // Ensure bookings are always sorted by ID
+  state.bookings.sort((a, b) => a.id - b.id);
 
   await saveQueueState(state);
   return newBookings;

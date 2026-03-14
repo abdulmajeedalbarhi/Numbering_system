@@ -36,17 +36,28 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  const [isManual, setIsManual] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+
   const handleBook = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.phone.length !== 8) {
       alert('يرجى إدخال رقم هاتف عماني صحيح (8 أرقام)');
       return;
     }
+    if (isManual && selectedIds.length !== formData.orders) {
+      alert(`يرجى اختيار ${formData.orders} أرقام يدوياً`);
+      return;
+    }
     try {
       const res = await fetch('/api/queue', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'book', ...formData }),
+        body: JSON.stringify({ 
+          action: 'book', 
+          ...formData, 
+          preferredIds: isManual ? selectedIds : undefined 
+        }),
       });
       const data = await res.json();
       if (data.error) {
@@ -59,6 +70,20 @@ export default function Home() {
       }
     } catch (err) {
       alert('حدث خطأ أثناء الحجز');
+    }
+  };
+
+  const toggleId = (id: number) => {
+    if (selectedIds.includes(id)) {
+      setSelectedIds(selectedIds.filter(i => i !== id));
+    } else {
+      if (selectedIds.length < formData.orders) {
+        setSelectedIds([...selectedIds, id].sort((a, b) => a - b));
+      } else {
+        // Replace the last one if we're at the limit? Or just ignore?
+        // Let's replace the first one to make it feel responsive
+        setSelectedIds([...selectedIds.slice(1), id].sort((a, b) => a - b));
+      }
     }
   };
 
@@ -130,7 +155,11 @@ export default function Home() {
         {state.isOpen && (
           <button 
             className="btn btn-primary" 
-            onClick={() => setShowModal(true)}
+            onClick={() => {
+              setShowModal(true);
+              setIsManual(false);
+              setSelectedIds([]);
+            }}
             disabled={isFull}
             style={{ 
               opacity: isFull ? 0.5 : 1, 
@@ -177,7 +206,7 @@ export default function Home() {
 
       {showModal && (
         <div className="modal-overlay">
-          <div className="modal" style={{ padding: '1rem' }}>
+          <div className="modal" style={{ padding: '1rem', width: '95%', maxWidth: '400px' }}>
             {!bookingResult ? (
               <>
                 <h2 style={{ marginBottom: '0.75rem', color: 'var(--primary)', fontSize: '1.1rem' }}>تفاصيل الحجز</h2>
@@ -213,11 +242,79 @@ export default function Home() {
                   <div className="form-group" style={{ marginBottom: '0.75rem' }}>
                     <label style={{ fontSize: '0.85rem' }}>عدد التمصيرات</label>
                     <div className="order-counter" style={{ padding: '0.25rem' }}>
-                      <button type="button" className="counter-btn" style={{ width: '28px', height: '28px' }} onClick={() => setFormData({...formData, orders: Math.max(1, formData.orders - 1)})}>-</button>
+                      <button type="button" className="counter-btn" style={{ width: '28px', height: '28px' }} onClick={() => {
+                        setFormData({...formData, orders: Math.max(1, formData.orders - 1)});
+                        setSelectedIds([]);
+                      }}>-</button>
                       <span className="counter-value" style={{ fontSize: '1rem' }}>{formData.orders}</span>
-                      <button type="button" className="counter-btn" style={{ width: '28px', height: '28px' }} onClick={() => setFormData({...formData, orders: formData.orders + 1})}>+</button>
+                      <button type="button" className="counter-btn" style={{ width: '28px', height: '28px' }} onClick={() => {
+                        setFormData({...formData, orders: formData.orders + 1});
+                        setSelectedIds([]);
+                      }}>+</button>
                     </div>
                   </div>
+
+                  <div style={{ marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <input 
+                      type="checkbox" 
+                      id="manualSelect"
+                      checked={isManual}
+                      onChange={(e) => {
+                        setIsManual(e.target.checked);
+                        setSelectedIds([]);
+                      }}
+                    />
+                    <label htmlFor="manualSelect" style={{ fontSize: '0.85rem', cursor: 'pointer' }}>تحديد الأرقام يدوياً</label>
+                  </div>
+
+                  {isManual && (
+                    <div style={{ marginBottom: '1rem' }}>
+                      <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+                        اختر {formData.orders} أرقام: 
+                        <span style={{ color: 'var(--primary)', fontWeight: 800, marginRight: '5px' }}>
+                          {selectedIds.length} / {formData.orders}
+                        </span>
+                      </p>
+                      <div style={{ 
+                        display: 'grid', 
+                        gridTemplateColumns: 'repeat(5, 1fr)', 
+                        gap: '4px', 
+                        maxHeight: '150px', 
+                        overflowY: 'auto',
+                        padding: '4px',
+                        border: '1px solid var(--border)',
+                        borderRadius: '0.5rem',
+                        backgroundColor: '#f8fafc'
+                      }}>
+                        {Array.from({ length: state.maxBookings - state.currentNumber }, (_, i) => state.currentNumber + i + 1).map(id => {
+                          const isTaken = state.bookings.some((b: any) => b.id === id);
+                          const isSelected = selectedIds.includes(id);
+                          return (
+                            <button
+                              key={id}
+                              type="button"
+                              disabled={isTaken}
+                              onClick={() => toggleId(id)}
+                              style={{
+                                padding: '4px 2px',
+                                fontSize: '0.75rem',
+                                borderRadius: '4px',
+                                border: '1px solid',
+                                cursor: isTaken ? 'not-allowed' : 'pointer',
+                                backgroundColor: isSelected ? 'var(--primary)' : isTaken ? '#e2e8f0' : '#fff',
+                                color: isSelected ? '#fff' : isTaken ? '#94a3b8' : 'var(--text)',
+                                borderColor: isSelected ? 'var(--primary)' : '#e2e8f0',
+                                fontWeight: isSelected ? 800 : 400
+                              }}
+                            >
+                              {id}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     <button type="submit" className="btn btn-primary" style={{ flex: 2, padding: '0.6rem', fontSize: '0.95rem' }}>تأكيد الحجز</button>
                     <button type="button" className="btn btn-outline" style={{ flex: 1, padding: '0.5rem', fontSize: '0.85rem', marginTop: '0' }} onClick={() => setShowModal(false)}>إلغاء</button>
