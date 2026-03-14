@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "البارحي | نظام الحجز",
-  description: "سر التمصيرة العمانية - نظام إدارة الحجز والترقيم",
+  title: "البارحي (نظام الحجز والترقيم)",
+  description: "سر التمصيرة العمانية - نظام إدارة الحجز والترقيم - البارحي",
   manifest: "/manifest.json",
   themeColor: "#ffffff",
   viewport: "width=device-width, initial-scale=1, maximum-scale=1",
