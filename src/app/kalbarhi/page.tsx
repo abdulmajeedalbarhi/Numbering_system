@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function Admin() {
   const [state, setState] = useState<any>(null);
@@ -51,6 +52,9 @@ export default function Admin() {
           <h1 className="title" style={{ fontSize: '1.5rem', marginBottom: '0' }}>لوحة التحكم</h1>
           <p className="subtitle" style={{ marginBottom: '0', fontSize: '0.8rem' }}>إدارة نظام الترقيم</p>
         </div>
+        <Link href="/" style={{ textDecoration: 'none', fontSize: '1.25rem', padding: '0.4rem', background: '#f1f5f9', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          🏠
+        </Link>
       </header>
 
       <div className="admin-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
