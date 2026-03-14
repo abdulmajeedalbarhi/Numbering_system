@@ -76,7 +76,7 @@ export async function addBooking(name: string, phone: string, orders: number, pr
     // Sequential fallback
     if (state.bookings.length + orders > state.maxBookings) return null;
     
-    let nextId = state.lastBookingId + 1;
+    let nextId = state.currentNumber + 1;
     for (let i = 0; i < orders; i++) {
       // Find the next truly available ID (skipping any that might have been manually picked)
       while (existingIds.includes(nextId) || nextId <= state.currentNumber) {
