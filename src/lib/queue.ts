@@ -1,7 +1,4 @@
-import fs from 'fs';
-import path from 'path';
-
-const DATA_FILE = path.join(process.cwd(), 'queue_data.json');
+import { kv } from '@vercel/kv';
 
 export interface Booking {
   id: number;
@@ -19,9 +16,7 @@ export interface QueueState {
   maxBookings: number;
 }
 
-// Note: For real production on Vercel, use @vercel/kv or a database.
-// This in-memory storage will reset when the serverless function cold-starts.
-let globalQueueState: QueueState = {
+const DEFAULT_STATE: QueueState = {
   currentNumber: 0,
   bookings: [],
   isOpen: true,
@@ -29,16 +24,28 @@ let globalQueueState: QueueState = {
   maxBookings: 100,
 };
 
-export function getQueueState(): QueueState {
-  return globalQueueState;
+const KV_KEY = 'kalbarhi_queue_state';
+
+export async function getQueueState(): Promise<QueueState> {
+  try {
+    const state = await kv.get<QueueState>(KV_KEY);
+    return state || DEFAULT_STATE;
+  } catch (err) {
+    console.error('Failed to get queue state from KV', err);
+    return DEFAULT_STATE;
+  }
 }
 
-export function saveQueueState(state: QueueState) {
-  globalQueueState = state;
+export async function saveQueueState(state: QueueState): Promise<void> {
+  try {
+    await kv.set(KV_KEY, state);
+  } catch (err) {
+    console.error('Failed to save queue state to KV', err);
+  }
 }
 
-export function addBooking(name: string, phone: string, orders: number): Booking[] | null {
-  const state = getQueueState();
+export async function addBooking(name: string, phone: string, orders: number): Promise<Booking[] | null> {
+  const state = await getQueueState();
   if (!state.isOpen) return null;
   
   // Ensure we don't exceed max bookings with the total orders
@@ -50,7 +57,7 @@ export function addBooking(name: string, phone: string, orders: number): Booking
       id: state.lastBookingId + 1,
       name,
       phone,
-      orders: orders.toString(), // Store the original total orders for reference
+      orders: orders.toString(),
       timestamp: new Date().toISOString(),
     };
     state.bookings.push(booking);
@@ -58,40 +65,63 @@ export function addBooking(name: string, phone: string, orders: number): Booking
     newBookings.push(booking);
   }
 
-  saveQueueState(state);
+  await saveQueueState(state);
   return newBookings;
 }
 
-export function nextCustomer(): Booking | null {
-  const state = getQueueState();
+export async function nextCustomer(): Promise<Booking | null> {
+  const state = await getQueueState();
   if (state.bookings.length === 0) return null;
 
-  // In a real system, currentNumber should probably match the ID of the customer being served.
-  // We'll just increment the currentNumber and keep the booking in the list for admin view.
-  // Actually, let's say "currentNumber" is the ID of the booking currently being processed.
-  
   // Find the first booking with an ID greater than currentNumber
   const next = state.bookings.find(b => b.id > state.currentNumber);
   if (next) {
     state.currentNumber = next.id;
-    saveQueueState(state);
+    await saveQueueState(state);
     return next;
   }
   return null;
 }
 
-export function resetQueue() {
-  globalQueueState = {
-    currentNumber: 0,
-    bookings: [],
-    isOpen: true,
-    lastBookingId: 0,
-    maxBookings: globalQueueState.maxBookings, // Keep the current limit
+export async function resetQueue(): Promise<void> {
+  const state = await getQueueState();
+  const newState: QueueState = {
+    ...DEFAULT_STATE,
+    maxBookings: state.maxBookings // Keep the current limit
   };
+  await saveQueueState(newState);
 }
 
-export function toggleQueue(isOpen: boolean) {
-  const state = getQueueState();
+export async function toggleQueue(isOpen: boolean): Promise<void> {
+  const state = await getQueueState();
   state.isOpen = isOpen;
-  saveQueueState(state);
+  await saveQueueState(state);
+}
+
+export async function setMaxBookings(limit: number): Promise<void> {
+  const state = await getQueueState();
+  state.maxBookings = limit;
+  await saveQueueState(state);
+}
+
+export async function updateBooking(id: number, updates: Partial<Booking>): Promise<boolean> {
+  const state = await getQueueState();
+  const index = state.bookings.findIndex(b => b.id === id);
+  if (index !== -1) {
+    state.bookings[index] = { ...state.bookings[index], ...updates };
+    await saveQueueState(state);
+    return true;
+  }
+  return false;
+}
+
+export async function deleteBooking(id: number): Promise<boolean> {
+  const state = await getQueueState();
+  const initialLength = state.bookings.length;
+  state.bookings = state.bookings.filter(b => b.id !== id);
+  if (state.bookings.length !== initialLength) {
+    await saveQueueState(state);
+    return true;
+  }
+  return false;
 }
