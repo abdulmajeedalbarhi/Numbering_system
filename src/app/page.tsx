@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
   const [state, setState] = useState({ currentNumber: 0, isOpen: true, maxBookings: 100, bookingCount: 0, bookings: [] as any[] });
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ name: '', phone: '', orders: 1 });
@@ -64,6 +66,12 @@ export default function Home() {
     setSearchError('');
     setSearchResult(null);
     if (!searchQuery) return;
+
+    // Admin shortcut
+    if (searchQuery.toLowerCase() === 'kab') {
+      router.push('/kalbarhi');
+      return;
+    }
 
     // Support search by exact phone or name
     const matches = state.bookings.filter((b: any) => 
