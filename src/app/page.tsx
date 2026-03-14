@@ -102,7 +102,7 @@ export default function Home() {
   return (
     <main style={{ padding: '0.5rem 0.5rem' }}>
       <header style={{ textAlign: 'center', marginBottom: '0.75rem' }}>
-        <h1 className="title" style={{ fontSize: '1.75rem', marginBottom: '0.1rem' }}>كشخة البارحي</h1>
+        <h1 className="title" style={{ fontSize: '2rem', marginBottom: '0.1rem' }}>البارحي</h1>
         <p className="subtitle" style={{ fontSize: '0.85rem', marginBottom: '0' }}>سر الكشخة العمانية</p>
       </header>
 

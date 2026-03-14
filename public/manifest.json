@@ -1,7 +1,7 @@
 {
-  "name": "كشخة البارحي",
+  "name": "البارحي",
   "short_name": "البارحي",
-  "description": "نظام الحجز والترقيم - كشخة البارحي",
+  "description": "نظام الحجز والترقيم - البارحي",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
