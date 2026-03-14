@@ -53,6 +53,15 @@ main {
   margin-bottom: 2rem;
 }
 
+header img {
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05));
+  transition: transform 0.3s ease;
+}
+
+header img:hover {
+  transform: scale(1.02);
+}
+
 .number-display {
   font-size: 6rem;
   font-weight: 900;

@@ -54,15 +54,12 @@ export default function Admin() {
 
   return (
     <main style={{ maxWidth: '800px', padding: '0.5rem 0.5rem' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <Link href="/" style={{ textDecoration: 'none', fontSize: '1.25rem', padding: '0.4rem', background: '#f1f5f9', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             🏠
           </Link>
-          <div>
-            <h1 className="title" style={{ fontSize: '1.25rem', marginBottom: '0' }}>لوحة التحكم</h1>
-            <p className="subtitle" style={{ marginBottom: '0', fontSize: '0.75rem' }}>إدارة نظام الترقيم</p>
-          </div>
+          <img src="/logo.png" alt="البارحي" style={{ height: '50px', width: 'auto' }} />
         </div>
         <button 
           onClick={() => setShowQR(true)}
@@ -71,12 +68,12 @@ export default function Admin() {
             color: 'white', 
             border: 'none', 
             borderRadius: '50%', 
-            width: '40px', 
-            height: '40px', 
+            width: '38px', 
+            height: '38px', 
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center',
-            fontSize: '1.25rem',
+            fontSize: '1.1rem',
             cursor: 'pointer',
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
           }}

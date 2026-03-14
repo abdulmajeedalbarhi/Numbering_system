@@ -133,16 +133,18 @@ export default function Home() {
 
   return (
     <main style={{ padding: '0.5rem 0.5rem' }}>
-      <header style={{ position: 'relative', textAlign: 'center', marginBottom: '0.75rem' }}>
-        <h1 className="title" style={{ fontSize: '2rem', marginBottom: '0.1rem' }}>البارحي</h1>
-        <p className="subtitle" style={{ fontSize: '0.85rem', marginBottom: '0' }}>سر الكشخة العمانية</p>
+      <header style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '1rem', paddingTop: '0.5rem' }}>
+        <img 
+          src="/logo.png" 
+          alt="البارحي" 
+          style={{ height: '90px', width: 'auto', marginBottom: '-10px' }} 
+        />
         <button 
           onClick={() => setShowQR(true)}
           style={{ 
             position: 'absolute',
-            top: '50%',
+            top: '10px',
             right: '0',
-            transform: 'translateY(-50%)',
             background: 'white', 
             color: 'var(--primary)', 
             border: '1px solid var(--border)', 
@@ -154,6 +156,7 @@ export default function Home() {
             justifyContent: 'center',
             fontSize: '1rem',
             cursor: 'pointer',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
           }}
           title="عرض رمز QR"
         >
