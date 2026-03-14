@@ -46,85 +46,88 @@ export default function Admin() {
 
   return (
     <main style={{ maxWidth: '800px' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
         <div>
-          <h1 className="title" style={{ fontSize: '2rem' }}>لوحة التحكم</h1>
-          <p className="subtitle">إدارة نظام الترقيم</p>
+          <h1 className="title" style={{ fontSize: '1.8rem' }}>لوحة التحكم</h1>
+          <p className="subtitle" style={{ marginBottom: '0', fontSize: '1rem' }}>إدارة نظام الترقيم</p>
         </div>
       </header>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
-        <section className="card">
-          <p style={{ color: 'var(--text-muted)' }}>الرقم الحالي</p>
-          <div className="number-display" style={{ fontSize: '4rem', margin: '1rem 0' }}>
+      <div className="admin-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+        <section className="card" style={{ padding: '1rem' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>الرقم الحالي</p>
+          <div className="number-display" style={{ fontSize: '3rem', margin: '0.5rem 0' }}>
             {state.currentNumber || '-'}
           </div>
-          <button className="btn btn-primary" onClick={() => adminAction('next')}>
+          <button className="btn btn-primary" onClick={() => adminAction('next')} style={{ padding: '0.6rem', fontSize: '0.9rem' }}>
             العميل التالي
           </button>
         </section>
 
-        <section className="card">
-          <p style={{ color: 'var(--text-muted)' }}>حالة النظام</p>
-          <div style={{ fontSize: '1.5rem', fontWeight: 700, margin: '2rem 0' }}>
+        <section className="card" style={{ padding: '1rem' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>حالة النظام</p>
+          <div style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0.75rem 0' }}>
             {state.isOpen ? 'مفتوح للجمهور' : 'مغلق حالياً'}
           </div>
           <button 
             className={`btn ${state.isOpen ? 'btn-outline' : 'btn-primary'}`} 
-            style={{ borderColor: state.isOpen ? 'var(--danger)' : '', color: state.isOpen ? 'var(--danger)' : '' }}
+            style={{ 
+              borderColor: state.isOpen ? 'var(--danger)' : '', 
+              color: state.isOpen ? 'var(--danger)' : '', 
+              padding: '0.6rem', 
+              fontSize: '0.9rem',
+              marginTop: '0' 
+            }}
             onClick={() => adminAction('toggle')}
           >
             {state.isOpen ? 'إغلاق الحجز' : 'فتح الحجز'}
           </button>
         </section>
 
-        <section className="card" style={{ gridColumn: 'span 2' }}>
-          <p style={{ color: 'var(--text-muted)' }}>الحد الأقصى للحجوزات</p>
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'center', margin: '1rem 0' }}>
+        <section className="card" style={{ gridColumn: 'span 2', padding: '0.75rem' }}>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>الحد الأقصى:</span>
             <input 
               type="number" 
               value={state.maxBookings}
               onChange={(e) => adminAction('setLimit', { limit: e.target.value })}
-              style={{ width: '100px', textAlign: 'center', padding: '0.5rem', borderRadius: '0.5rem', border: '1px solid var(--border)' }}
+              style={{ width: '70px', textAlign: 'center', padding: '0.3rem', borderRadius: '0.5rem', border: '1px solid var(--border)', fontSize: '0.9rem' }}
             />
-            <span style={{ fontWeight: 600 }}>حجز</span>
+            <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>حجز</span>
           </div>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>سيتم منع الحجوزات بعد الوصول لهذا الرقم</p>
         </section>
       </div>
 
-      <section className="card" style={{ textAlign: 'right' }}>
-        <h2 style={{ marginBottom: '1.5rem' }}>قائمة الانتظار ({state.bookings.filter((b: any) => b.id > state.currentNumber).length})</h2>
+      <section className="card" style={{ textAlign: 'right', padding: '1rem' }}>
+        <h2 style={{ marginBottom: '0.75rem', fontSize: '1.1rem' }}>قائمة الانتظار ({state.bookings.filter((b: any) => b.id > state.currentNumber).length})</h2>
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: '2px solid var(--border)' }}>
-                <th style={{ padding: '1rem', textAlign: 'right' }}>الرقم</th>
-                <th style={{ padding: '1rem', textAlign: 'right' }}>الاسم</th>
-                <th style={{ padding: '1rem', textAlign: 'right' }}>الهاتف</th>
-                <th style={{ padding: '1rem', textAlign: 'right' }}>الطلبات</th>
-                <th style={{ padding: '1rem', textAlign: 'center' }}>التحكم</th>
+                <th style={{ padding: '0.5rem', textAlign: 'right' }}>الرقم</th>
+                <th style={{ padding: '0.5rem', textAlign: 'right' }}>الاسم</th>
+                <th style={{ padding: '0.5rem', textAlign: 'right' }}>الهاتف</th>
+                <th style={{ padding: '0.5rem', textAlign: 'center' }}>التحكم</th>
               </tr>
             </thead>
             <tbody>
               {state.bookings.filter((b: any) => b.id > state.currentNumber).map((booking: any) => (
                 <tr key={booking.id} style={{ borderBottom: '1px solid var(--border)' }}>
-                  <td style={{ padding: '1rem', fontWeight: 800 }}>{booking.id}</td>
-                  <td style={{ padding: '1rem' }}>{booking.name}</td>
-                  <td style={{ padding: '1rem' }}>{booking.phone}</td>
-                  <td style={{ padding: '1rem' }}>{booking.orders}</td>
-                  <td style={{ padding: '1rem', textAlign: 'center' }}>
-                    <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                  <td style={{ padding: '0.5rem', fontWeight: 800 }}>{booking.id}</td>
+                  <td style={{ padding: '0.5rem' }}>{booking.name}</td>
+                  <td style={{ padding: '0.5rem' }}>{booking.phone}</td>
+                  <td style={{ padding: '0.5rem', textAlign: 'center' }}>
+                    <div style={{ display: 'flex', gap: '0.3rem', justifyContent: 'center' }}>
                       <button 
                         className="btn btn-outline" 
-                        style={{ width: 'auto', padding: '0.25rem 0.75rem', fontSize: '0.8rem' }}
+                        style={{ width: 'auto', padding: '0.15rem 0.4rem', fontSize: '0.7rem', marginTop: 0 }}
                         onClick={() => setEditBooking(booking)}
                       >
                         تعديل
                       </button>
                       <button 
                         className="btn btn-outline" 
-                        style={{ width: 'auto', padding: '0.25rem 0.75rem', fontSize: '0.8rem', color: 'var(--danger)', borderColor: 'var(--danger)' }}
+                        style={{ width: 'auto', padding: '0.15rem 0.4rem', fontSize: '0.7rem', color: 'var(--danger)', borderColor: 'var(--danger)', marginTop: 0 }}
                         onClick={() => {
                           if (confirm('هل أنت متأكد من حذف هذا الحجز؟')) {
                             adminAction('delete', { id: booking.id });
@@ -139,7 +142,7 @@ export default function Admin() {
               ))}
               {state.bookings.filter((b: any) => b.id > state.currentNumber).length === 0 && (
                 <tr>
-                  <td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+                  <td colSpan={4} style={{ padding: '1rem', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
                     لا يوجد عملاء في الانتظار
                   </td>
                 </tr>
@@ -150,7 +153,7 @@ export default function Admin() {
 
         <button 
           className="btn btn-outline" 
-          style={{ marginTop: '2rem', color: 'var(--danger)', borderColor: 'var(--danger)' }}
+          style={{ marginTop: '1rem', color: 'var(--danger)', borderColor: 'var(--danger)', padding: '0.4rem', fontSize: '0.8rem', width: 'auto' }}
           onClick={() => {
             if (confirm('هل أنت متأكد من تصفير النظام؟ سيتم حذف جميع البيانات.')) {
               adminAction('reset');
@@ -164,34 +167,37 @@ export default function Admin() {
       {editBooking && (
         <div className="modal-overlay">
           <div className="modal">
-            <h2 style={{ marginBottom: '1.5rem', color: 'var(--primary)' }}>تعديل بيانات الحجز رقم {editBooking.id}</h2>
-            <div className="form-group">
-              <label>الاسم</label>
+            <h2 style={{ marginBottom: '1rem', color: 'var(--primary)', fontSize: '1.2rem' }}>تعديل بيانات الحجز رقم {editBooking.id}</h2>
+            <div className="form-group" style={{ marginBottom: '0.75rem' }}>
+              <label style={{ fontSize: '0.9rem' }}>الاسم</label>
               <input 
                 type="text" 
                 value={editBooking.name}
                 onChange={e => setEditBooking({...editBooking, name: e.target.value})}
+                style={{ padding: '0.5rem' }}
               />
             </div>
-            <div className="form-group">
-              <label>رقم الهاتف</label>
+            <div className="form-group" style={{ marginBottom: '0.75rem' }}>
+              <label style={{ fontSize: '0.9rem' }}>رقم الهاتف</label>
               <input 
                 type="text" 
                 value={editBooking.phone}
                 onChange={e => setEditBooking({...editBooking, phone: e.target.value})}
+                style={{ padding: '0.5rem' }}
               />
             </div>
-            <div className="form-group">
-              <label>عدد الطلبات</label>
+            <div className="form-group" style={{ marginBottom: '1rem' }}>
+              <label style={{ fontSize: '0.9rem' }}>عدد الطلبات</label>
               <input 
                 type="number" 
                 value={editBooking.orders}
                 onChange={e => setEditBooking({...editBooking, orders: parseInt(e.target.value) || 1})}
+                style={{ padding: '0.5rem' }}
               />
             </div>
-            <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-              <button className="btn btn-primary" onClick={() => adminAction('edit', editBooking)}>حفظ التعديلات</button>
-              <button className="btn btn-outline" onClick={() => setEditBooking(null)}>إلغاء</button>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button className="btn btn-primary" style={{ padding: '0.5rem', fontSize: '0.9rem' }} onClick={() => adminAction('edit', editBooking)}>حفظ</button>
+              <button className="btn btn-outline" style={{ padding: '0.5rem', fontSize: '0.9rem', marginTop: 0 }} onClick={() => setEditBooking(null)}>إلغاء</button>
             </div>
           </div>
         </div>
