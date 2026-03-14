@@ -1,0 +1,6 @@
+{
+  "currentNumber": 0,
+  "bookings": [],
+  "isOpen": false,
+  "lastBookingId": 0
+}
