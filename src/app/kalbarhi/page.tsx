@@ -59,6 +59,23 @@ export default function Admin() {
           <div className="number-display" style={{ fontSize: '3rem', margin: '0.5rem 0' }}>
             {state.currentNumber || '-'}
           </div>
+          
+          {state.currentNumber > 0 && (
+            <div style={{ marginBottom: '1rem', padding: '0.5rem', background: 'var(--bg)', borderRadius: '0.75rem', border: '1px solid var(--border)' }}>
+              {(() => {
+                const current = state.bookings.find((b: any) => b.id === state.currentNumber);
+                return current ? (
+                  <>
+                    <p style={{ fontWeight: 800, color: 'var(--primary)', fontSize: '1rem' }}>{current.name}</p>
+                    <p style={{ direction: 'ltr', fontSize: '0.85rem', color: 'var(--text-muted)' }}>+968 {current.phone}</p>
+                  </>
+                ) : (
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>تفاصيل غير متوفرة</p>
+                );
+              })()}
+            </div>
+          )}
+
           <button className="btn btn-primary" onClick={() => adminAction('next')} style={{ padding: '0.6rem', fontSize: '0.9rem' }}>
             العميل التالي
           </button>
@@ -166,7 +183,7 @@ export default function Admin() {
 
       {editBooking && (
         <div className="modal-overlay">
-          <div className="modal">
+          <div className="modal" style={{ padding: '1.25rem' }}>
             <h2 style={{ marginBottom: '1rem', color: 'var(--primary)', fontSize: '1.2rem' }}>تعديل بيانات الحجز رقم {editBooking.id}</h2>
             <div className="form-group" style={{ marginBottom: '0.75rem' }}>
               <label style={{ fontSize: '0.9rem' }}>الاسم</label>
