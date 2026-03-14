@@ -2,10 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { QRCodeSVG } from 'qrcode.react';
 
 export default function Admin() {
   const [state, setState] = useState<any>(null);
   const [editBooking, setEditBooking] = useState<any>(null);
+  const [showQR, setShowQR] = useState(false);
+  const [origin, setOrigin] = useState('');
+
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
 
   const fetchState = async () => {
     try {
@@ -48,13 +55,35 @@ export default function Admin() {
   return (
     <main style={{ maxWidth: '800px', padding: '0.5rem 0.5rem' }}>
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-        <div>
-          <h1 className="title" style={{ fontSize: '1.5rem', marginBottom: '0' }}>لوحة التحكم</h1>
-          <p className="subtitle" style={{ marginBottom: '0', fontSize: '0.8rem' }}>إدارة نظام الترقيم</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <Link href="/" style={{ textDecoration: 'none', fontSize: '1.25rem', padding: '0.4rem', background: '#f1f5f9', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            🏠
+          </Link>
+          <div>
+            <h1 className="title" style={{ fontSize: '1.25rem', marginBottom: '0' }}>لوحة التحكم</h1>
+            <p className="subtitle" style={{ marginBottom: '0', fontSize: '0.75rem' }}>إدارة نظام الترقيم</p>
+          </div>
         </div>
-        <Link href="/" style={{ textDecoration: 'none', fontSize: '1.25rem', padding: '0.4rem', background: '#f1f5f9', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          🏠
-        </Link>
+        <button 
+          onClick={() => setShowQR(true)}
+          style={{ 
+            background: 'var(--primary)', 
+            color: 'white', 
+            border: 'none', 
+            borderRadius: '50%', 
+            width: '40px', 
+            height: '40px', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            fontSize: '1.25rem',
+            cursor: 'pointer',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+          }}
+          title="عرض رمز QR"
+        >
+          📱
+        </button>
       </header>
 
       <div className="admin-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
@@ -220,6 +249,20 @@ export default function Admin() {
               <button className="btn btn-primary" style={{ flex: 1, padding: '0.5rem', fontSize: '0.9rem' }} onClick={() => adminAction('edit', editBooking)}>حفظ</button>
               <button className="btn btn-outline" style={{ flex: 1, padding: '0.5rem', fontSize: '0.9rem', marginTop: 0 }} onClick={() => setEditBooking(null)}>إلغاء</button>
             </div>
+          </div>
+        </div>
+      )}
+      {showQR && (
+        <div className="modal-overlay" onClick={() => setShowQR(false)}>
+          <div className="modal" style={{ padding: '1.5rem', textAlign: 'center', maxWidth: '300px' }} onClick={e => e.stopPropagation()}>
+            <h2 style={{ marginBottom: '1rem', fontSize: '1.1rem', color: 'var(--primary)' }}>المسح للحجز</h2>
+            <div style={{ background: 'white', padding: '1rem', borderRadius: '1rem', display: 'inline-block', marginBottom: '1rem' }}>
+              <QRCodeSVG value={origin} size={200} />
+            </div>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
+              امسح الكود لفتح صفحة الحجز للعملاء
+            </p>
+            <button className="btn btn-primary" onClick={() => setShowQR(false)}>إغلاق</button>
           </div>
         </div>
       )}

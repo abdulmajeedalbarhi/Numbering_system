@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { QRCodeSVG } from 'qrcode.react';
 
 export default function Home() {
   const router = useRouter();
@@ -13,6 +14,12 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResult, setSearchResult] = useState<any>(null);
   const [searchError, setSearchError] = useState('');
+  const [showQR, setShowQR] = useState(false);
+  const [origin, setOrigin] = useState('');
+
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
 
   const fetchState = async () => {
     try {
@@ -126,9 +133,32 @@ export default function Home() {
 
   return (
     <main style={{ padding: '0.5rem 0.5rem' }}>
-      <header style={{ textAlign: 'center', marginBottom: '0.75rem' }}>
+      <header style={{ position: 'relative', textAlign: 'center', marginBottom: '0.75rem' }}>
         <h1 className="title" style={{ fontSize: '2rem', marginBottom: '0.1rem' }}>البارحي</h1>
         <p className="subtitle" style={{ fontSize: '0.85rem', marginBottom: '0' }}>سر الكشخة العمانية</p>
+        <button 
+          onClick={() => setShowQR(true)}
+          style={{ 
+            position: 'absolute',
+            top: '50%',
+            right: '0',
+            transform: 'translateY(-50%)',
+            background: 'white', 
+            color: 'var(--primary)', 
+            border: '1px solid var(--border)', 
+            borderRadius: '50%', 
+            width: '32px', 
+            height: '32px', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            fontSize: '1rem',
+            cursor: 'pointer',
+          }}
+          title="عرض رمز QR"
+        >
+          📱
+        </button>
       </header>
 
       <section className="card" style={{ padding: '0.75rem 1rem' }}>
@@ -341,6 +371,20 @@ export default function Home() {
                 </button>
               </div>
             )}
+          </div>
+        </div>
+      )}
+      {showQR && (
+        <div className="modal-overlay" onClick={() => setShowQR(false)}>
+          <div className="modal" style={{ padding: '1.5rem', textAlign: 'center', maxWidth: '300px' }} onClick={e => e.stopPropagation()}>
+            <h2 style={{ marginBottom: '1rem', fontSize: '1.1rem', color: 'var(--primary)' }}>شارك الصفحة</h2>
+            <div style={{ background: 'white', padding: '1rem', borderRadius: '1rem', display: 'inline-block', marginBottom: '1rem' }}>
+              <QRCodeSVG value={origin} size={200} />
+            </div>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
+              امسح الكود لفتح صفحة الحجز
+            </p>
+            <button className="btn btn-primary" onClick={() => setShowQR(false)}>إغلاق</button>
           </div>
         </div>
       )}
