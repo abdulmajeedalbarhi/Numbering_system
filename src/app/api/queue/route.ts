@@ -20,11 +20,12 @@ export async function POST(req: NextRequest) {
   const { action, name, phone, orders } = body;
 
   if (action === 'book') {
+    const { name, phone, orders, preferredIds } = body;
     if (!name || !phone || !orders) {
       return NextResponse.json({ error: 'Missing details' }, { status: 400 });
     }
     const orderCount = parseInt(orders.toString()) || 1;
-    const bookings = await addBooking(name, phone, orderCount);
+    const bookings = await addBooking(name, phone, orderCount, preferredIds);
     if (!bookings) {
       return NextResponse.json({ error: 'Queue is full or closed' }, { status: 403 });
     }
