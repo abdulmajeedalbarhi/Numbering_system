@@ -17,5 +17,14 @@
       "sizes": "512x512",
       "type": "image/png"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "لوحة التحكم",
+      "short_name": "المشرف",
+      "description": "لوحة تحكم المشرف والتحكم بالأرقام",
+      "url": "/kalbarhi",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    }
   ]
 }

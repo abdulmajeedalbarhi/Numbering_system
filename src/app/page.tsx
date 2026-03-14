@@ -105,6 +105,10 @@ export default function Home() {
              }}>
           {!state.isOpen ? 'النظام مغلق' : isFull ? 'اكتملت الحجوزات لهذا اليوم' : 'النظام مفتوح'}
         </div>
+
+        <div style={{ marginTop: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+          تم حجز <span style={{ fontWeight: 800, color: 'var(--primary)' }}>{state.bookingCount}</span> من أصل <span style={{ fontWeight: 800 }}>{state.maxBookings}</span> حجز
+        </div>
         
         <p style={{ color: 'var(--text-muted)', fontWeight: 600, fontSize: '0.9rem' }}>الرقم الحالي</p>
         <div className="number-display" style={{ fontSize: '4.5rem', margin: '0.75rem 0' }}>
