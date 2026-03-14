@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getQueueState, addBooking, nextCustomer, resetQueue, toggleQueue } from '@/lib/queue';
+import { getQueueState, addBooking, nextCustomer, resetQueue, toggleQueue, saveQueueState } from '@/lib/queue';
 
 export async function GET() {
   const state = getQueueState();
@@ -10,27 +10,28 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { action, name, phone, orders, username, password } = body;
+  const { action, name, phone, orders } = body;
 
   if (action === 'book') {
     if (!name || !phone || !orders) {
       return NextResponse.json({ error: 'Missing details' }, { status: 400 });
     }
-    const booking = addBooking(name, phone, orders);
-    if (!booking) {
-      return NextResponse.json({ error: 'Queue is closed' }, { status: 403 });
+    const orderCount = parseInt(orders.toString()) || 1;
+    const bookings = addBooking(name, phone, orderCount);
+    if (!bookings) {
+      return NextResponse.json({ error: 'Queue is full or closed' }, { status: 403 });
     }
-    return NextResponse.json(booking);
+    return NextResponse.json(bookings);
   }
 
-  // Admin actions
-  if (action === 'next' || action === 'reset' || action === 'toggle' || action === 'login') {
-    if (username !== 'kalbarhi' || password !== 'k@123') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+  // Admin actions (now public as requested)
+  if (action === 'next' || action === 'reset' || action === 'toggle' || action === 'setLimit' || action === 'edit' || action === 'delete') {
+    const state = getQueueState();
 
-    if (action === 'login') {
-      return NextResponse.json({ success: true });
+    if (action === 'setLimit') {
+      state.maxBookings = parseInt(body.limit);
+      saveQueueState(state);
+      return NextResponse.json({ maxBookings: state.maxBookings });
     }
 
     if (action === 'next') {
@@ -44,9 +45,26 @@ export async function POST(req: NextRequest) {
     }
 
     if (action === 'toggle') {
-      const state = getQueueState();
       toggleQueue(!state.isOpen);
       return NextResponse.json({ isOpen: !state.isOpen });
+    }
+
+    if (action === 'edit') {
+      const { id, name, phone, orders } = body;
+      const index = state.bookings.findIndex((b: any) => b.id === id);
+      if (index !== -1) {
+        state.bookings[index] = { ...state.bookings[index], name, phone, orders };
+        saveQueueState(state);
+        return NextResponse.json({ success: true });
+      }
+      return NextResponse.json({ error: 'Record not found' }, { status: 404 });
+    }
+
+    if (action === 'delete') {
+      const { id } = body;
+      state.bookings = state.bookings.filter((b: any) => b.id !== id);
+      saveQueueState(state);
+      return NextResponse.json({ success: true });
     }
   }
 

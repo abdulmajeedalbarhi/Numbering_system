@@ -16,6 +16,7 @@ export interface QueueState {
   bookings: Booking[];
   isOpen: boolean;
   lastBookingId: number;
+  maxBookings: number;
 }
 
 // Note: For real production on Vercel, use @vercel/kv or a database.
@@ -25,6 +26,7 @@ let globalQueueState: QueueState = {
   bookings: [],
   isOpen: true,
   lastBookingId: 0,
+  maxBookings: 100,
 };
 
 export function getQueueState(): QueueState {
@@ -35,22 +37,29 @@ export function saveQueueState(state: QueueState) {
   globalQueueState = state;
 }
 
-export function addBooking(name: string, phone: string, orders: string): Booking | null {
+export function addBooking(name: string, phone: string, orders: number): Booking[] | null {
   const state = getQueueState();
   if (!state.isOpen) return null;
+  
+  // Ensure we don't exceed max bookings with the total orders
+  if (state.bookings.length + orders > state.maxBookings) return null;
 
-  const newBooking: Booking = {
-    id: state.lastBookingId + 1,
-    name,
-    phone,
-    orders,
-    timestamp: new Date().toISOString(),
-  };
+  const newBookings: Booking[] = [];
+  for (let i = 0; i < orders; i++) {
+    const booking: Booking = {
+      id: state.lastBookingId + 1,
+      name,
+      phone,
+      orders: orders.toString(), // Store the original total orders for reference
+      timestamp: new Date().toISOString(),
+    };
+    state.bookings.push(booking);
+    state.lastBookingId += 1;
+    newBookings.push(booking);
+  }
 
-  state.bookings.push(newBooking);
-  state.lastBookingId += 1;
   saveQueueState(state);
-  return newBooking;
+  return newBookings;
 }
 
 export function nextCustomer(): Booking | null {
@@ -77,6 +86,7 @@ export function resetQueue() {
     bookings: [],
     isOpen: true,
     lastBookingId: 0,
+    maxBookings: globalQueueState.maxBookings, // Keep the current limit
   };
 }
 
