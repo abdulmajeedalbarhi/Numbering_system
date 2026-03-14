@@ -195,15 +195,17 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="form-group" style={{ marginBottom: '1rem' }}>
-                    <label style={{ fontSize: '0.9rem' }}>عدد الأشخاص</label>
+                    <label style={{ fontSize: '0.9rem' }}>عدد التمصيرات</label>
                     <div className="order-counter" style={{ padding: '0.4rem' }}>
                       <button type="button" className="counter-btn" style={{ width: '32px', height: '32px' }} onClick={() => setFormData({...formData, orders: Math.max(1, formData.orders - 1)})}>-</button>
                       <span className="counter-value" style={{ fontSize: '1.1rem' }}>{formData.orders}</span>
                       <button type="button" className="counter-btn" style={{ width: '32px', height: '32px' }} onClick={() => setFormData({...formData, orders: formData.orders + 1})}>+</button>
                     </div>
                   </div>
-                  <button type="submit" className="btn btn-primary" style={{ padding: '0.75rem', fontSize: '1rem' }}>تأكيد الحجز</button>
-                  <button type="button" className="btn btn-outline" style={{ padding: '0.6rem', fontSize: '0.9rem', marginTop: '0.5rem' }} onClick={() => setShowModal(false)}>إلغاء</button>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <button type="submit" className="btn btn-primary" style={{ flex: 2, padding: '0.75rem', fontSize: '1rem' }}>تأكيد الحجز</button>
+                    <button type="button" className="btn btn-outline" style={{ flex: 1, padding: '0.6rem', fontSize: '0.9rem', marginTop: '0' }} onClick={() => setShowModal(false)}>إلغاء</button>
+                  </div>
                 </form>
               </>
             ) : (
