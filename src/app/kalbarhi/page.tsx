@@ -58,25 +58,28 @@ export default function Admin() {
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center', 
-        marginBottom: '1.25rem',
+        marginBottom: '0.75rem',
         backgroundColor: 'transparent',
-        padding: '0.5rem 0'
+        padding: '0.1rem 0'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', width: '100%' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%' }}>
           <Link href="/" style={{ textDecoration: 'none', fontSize: '1.25rem', padding: '0.4rem', background: '#fff', border: '1px solid var(--border)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
             🏠
           </Link>
           <div className="card" style={{
-            padding: '0.5rem 1.5rem',
-            borderRadius: '1.5rem',
+            padding: '0',
+            borderRadius: '1.25rem',
             flex: 1,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            height: '80px',
-            backgroundColor: '#fff'
+            backgroundColor: '#fff',
+            overflow: 'hidden',
+            border: 'none',
+            boxShadow: 'none',
+            height: '60px'
           }}>
-            <img src="/logo.png" alt="البارحي" style={{ height: '100%', width: 'auto', objectFit: 'contain' }} />
+            <img src="/logo.png" alt="البارحي" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </div>
         </div>
         <button 
