@@ -132,26 +132,27 @@ export default function Home() {
   const isFull = state.bookingCount >= state.maxBookings;
 
   return (
-    <main style={{ padding: '0.5rem 0.5rem' }}>
+    <main style={{ padding: '0.4rem 0.5rem' }}>
       <header style={{ 
         position: 'relative', 
-        marginBottom: '1rem', 
-        paddingTop: '0.25rem',
+        marginBottom: '0.75rem', 
+        paddingTop: '0',
       }}>
         <div className="card" style={{
-          padding: '0.5rem',
+          padding: '0',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           width: '100%',
           overflow: 'hidden',
-          height: '220px',
-          backgroundColor: '#fff'
+          backgroundColor: '#fff',
+          border: 'none',
+          boxShadow: 'none'
         }}>
           <img 
             src="/logo.png" 
             alt="البارحي" 
-            style={{ height: '100%', width: 'auto', objectFit: 'contain' }} 
+            style={{ width: '100%', height: 'auto', display: 'block' }} 
           />
         </div>
         <button 
