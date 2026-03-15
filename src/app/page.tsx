@@ -138,15 +138,26 @@ export default function Home() {
         display: 'flex', 
         flexDirection: 'column', 
         alignItems: 'center', 
-        marginBottom: '1.25rem', 
-        paddingTop: '1rem',
-        backgroundColor: 'transparent'
+        marginBottom: '1.5rem', 
+        paddingTop: '0.75rem',
       }}>
-        <img 
-          src="/logo.png" 
-          alt="البارحي" 
-          style={{ height: '140px', width: 'auto', marginBottom: '0' }} 
-        />
+        <div style={{
+          backgroundColor: 'white',
+          borderRadius: '2rem',
+          padding: '1rem 2rem',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.06)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '90%',
+          maxWidth: '320px'
+        }}>
+          <img 
+            src="/logo.png" 
+            alt="البارحي" 
+            style={{ height: '120px', width: 'auto' }} 
+          />
+        </div>
         <button 
           onClick={() => setShowQR(true)}
           style={{ 

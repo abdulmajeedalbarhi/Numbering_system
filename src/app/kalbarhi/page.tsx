@@ -58,15 +58,24 @@ export default function Admin() {
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center', 
-        marginBottom: '1rem',
+        marginBottom: '1.25rem',
         backgroundColor: 'transparent',
         padding: '0.5rem 0'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <Link href="/" style={{ textDecoration: 'none', fontSize: '1.25rem', padding: '0.4rem', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <Link href="/" style={{ textDecoration: 'none', fontSize: '1.25rem', padding: '0.4rem', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
             🏠
           </Link>
-          <img src="/logo.png" alt="البارحي" style={{ height: '60px', width: 'auto' }} />
+          <div style={{
+            backgroundColor: 'white',
+            padding: '0.4rem 1.25rem',
+            borderRadius: '1rem',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+            display: 'flex',
+            alignItems: 'center'
+          }}>
+            <img src="/logo.png" alt="البارحي" style={{ height: '55px', width: 'auto' }} />
+          </div>
         </div>
         <button 
           onClick={() => setShowQR(true)}
