@@ -162,7 +162,7 @@ header img:hover {
   padding: 0.75rem;
   border: 1px solid var(--border);
   border-radius: 0.75rem;
-  font-size: 1rem;
+  font-size: 16px;
   font-family: inherit;
 }
 
