@@ -135,24 +135,23 @@ export default function Home() {
     <main style={{ padding: '0.4rem 0.5rem' }}>
       <header style={{ 
         position: 'relative', 
-        marginBottom: '0.75rem', 
-        paddingTop: '0',
+        marginBottom: '1rem', 
+        paddingTop: '0.25rem',
       }}>
         <div className="card" style={{
-          padding: '0',
+          padding: '1.5rem 3rem',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           width: '100%',
           overflow: 'hidden',
           backgroundColor: '#fff',
-          border: 'none',
-          boxShadow: 'none'
+          height: '200px'
         }}>
           <img 
             src="/logo.png" 
             alt="البارحي" 
-            style={{ width: '100%', height: 'auto', display: 'block' }} 
+            style={{ height: '100%', width: 'auto', objectFit: 'contain' }} 
           />
         </div>
         <button 
