@@ -58,7 +58,7 @@ export default function Admin() {
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center', 
-        marginBottom: '1.5rem',
+        marginBottom: '1.25rem',
         backgroundColor: 'transparent',
         padding: '0.5rem 0'
       }}>
@@ -67,14 +67,15 @@ export default function Admin() {
             🏠
           </Link>
           <div className="card" style={{
-            padding: '0.5rem 1.5rem',
+            padding: '0.25rem 1.5rem',
             borderRadius: '1.5rem',
             flex: 1,
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            height: '80px'
           }}>
-            <img src="/logo.png" alt="البارحي" style={{ height: '70px', width: 'auto' }} />
+            <img src="/logo.png" alt="البارحي" style={{ height: '100%', width: 'auto', objectFit: 'contain' }} />
           </div>
         </div>
         <button 
