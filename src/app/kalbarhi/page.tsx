@@ -56,32 +56,15 @@ export default function Admin() {
     <main style={{ maxWidth: '800px', padding: '0.5rem 0.5rem' }}>
       <header style={{ 
         display: 'flex', 
-        justifyContent: 'space-between', 
+        justifyContent: 'flex-start', 
         alignItems: 'center', 
         marginBottom: '1rem',
         backgroundColor: 'transparent',
         padding: '0.25rem 0'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%' }}>
-          <Link href="/" style={{ textDecoration: 'none', fontSize: '1.25rem', padding: '0.4rem', background: '#fff', border: '1px solid var(--border)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
-            🏠
-          </Link>
-          <div className="card" style={{
-            padding: '0',
-            borderRadius: '1.25rem',
-            flex: 1,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'transparent',
-            overflow: 'hidden',
-            border: 'none',
-            boxShadow: 'none',
-            height: '70px'
-          }}>
-            <img src="/logo.png" alt="البارحي" style={{ height: '100%', width: 'auto', objectFit: 'contain', display: 'block' }} />
-          </div>
-        </div>
+        <Link href="/" style={{ textDecoration: 'none', fontSize: '1.25rem', padding: '0.4rem', background: '#fff', border: '1px solid var(--border)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+          🏠
+        </Link>
       </header>
 
       <div className="admin-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
