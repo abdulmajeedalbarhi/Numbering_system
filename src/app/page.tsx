@@ -145,7 +145,7 @@ export default function Home() {
           alignItems: 'center',
           width: '100%',
           overflow: 'hidden',
-          backgroundColor: '#fbfaf8',
+          backgroundColor: 'transparent',
           border: 'none',
           boxShadow: 'none',
           height: '140px'

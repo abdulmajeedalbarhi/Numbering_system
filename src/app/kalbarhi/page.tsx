@@ -73,7 +73,7 @@ export default function Admin() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: '#fbfaf8',
+            backgroundColor: 'transparent',
             overflow: 'hidden',
             border: 'none',
             boxShadow: 'none',
