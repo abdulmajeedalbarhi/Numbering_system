@@ -135,35 +135,28 @@ export default function Home() {
     <main style={{ padding: '0.5rem 0.5rem' }}>
       <header style={{ 
         position: 'relative', 
-        display: 'flex', 
-        flexDirection: 'column', 
-        alignItems: 'center', 
         marginBottom: '1.5rem', 
-        paddingTop: '0.75rem',
+        paddingTop: '0.5rem',
       }}>
-        <div style={{
-          backgroundColor: 'white',
-          borderRadius: '2rem',
-          padding: '1rem 2rem',
-          boxShadow: '0 8px 24px rgba(0,0,0,0.06)',
+        <div className="card" style={{
+          padding: '1.5rem 1rem',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          width: '90%',
-          maxWidth: '320px'
+          width: '100%',
         }}>
           <img 
             src="/logo.png" 
             alt="البارحي" 
-            style={{ height: '120px', width: 'auto' }} 
+            style={{ height: '160px', width: 'auto', maxWidth: '100%' }} 
           />
         </div>
         <button 
           onClick={() => setShowQR(true)}
           style={{ 
             position: 'absolute',
-            top: '10px',
-            right: '0',
+            top: '15px',
+            right: '15px',
             background: 'white', 
             color: 'var(--primary)', 
             border: '1px solid var(--border)', 
@@ -175,7 +168,8 @@ export default function Home() {
             justifyContent: 'center',
             fontSize: '1rem',
             cursor: 'pointer',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+            boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+            zIndex: 10
           }}
           title="عرض رمز QR"
         >

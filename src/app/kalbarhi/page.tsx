@@ -58,23 +58,23 @@ export default function Admin() {
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center', 
-        marginBottom: '1.25rem',
+        marginBottom: '1.5rem',
         backgroundColor: 'transparent',
         padding: '0.5rem 0'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <Link href="/" style={{ textDecoration: 'none', fontSize: '1.25rem', padding: '0.4rem', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', width: '100%' }}>
+          <Link href="/" style={{ textDecoration: 'none', fontSize: '1.25rem', padding: '0.4rem', background: '#fff', border: '1px solid var(--border)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
             🏠
           </Link>
-          <div style={{
-            backgroundColor: 'white',
-            padding: '0.4rem 1.25rem',
-            borderRadius: '1rem',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+          <div className="card" style={{
+            padding: '0.5rem 1.5rem',
+            borderRadius: '1.5rem',
+            flex: 1,
             display: 'flex',
+            justifyContent: 'center',
             alignItems: 'center'
           }}>
-            <img src="/logo.png" alt="البارحي" style={{ height: '55px', width: 'auto' }} />
+            <img src="/logo.png" alt="البارحي" style={{ height: '70px', width: 'auto' }} />
           </div>
         </div>
         <button 
