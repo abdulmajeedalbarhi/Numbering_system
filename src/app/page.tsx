@@ -145,7 +145,8 @@ export default function Home() {
           alignItems: 'center',
           width: '100%',
           overflow: 'hidden',
-          height: '220px'
+          height: '220px',
+          backgroundColor: '#fff'
         }}>
           <img 
             src="/logo.png" 

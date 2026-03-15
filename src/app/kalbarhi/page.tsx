@@ -73,7 +73,8 @@ export default function Admin() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            height: '80px'
+            height: '80px',
+            backgroundColor: '#fff'
           }}>
             <img src="/logo.png" alt="البارحي" style={{ height: '100%', width: 'auto', objectFit: 'contain' }} />
           </div>
