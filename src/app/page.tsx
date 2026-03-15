@@ -138,16 +138,14 @@ export default function Home() {
         display: 'flex', 
         flexDirection: 'column', 
         alignItems: 'center', 
-        marginBottom: '1rem', 
-        paddingTop: '0.5rem',
-        backgroundColor: 'white',
-        borderRadius: '1.5rem',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+        marginBottom: '1.25rem', 
+        paddingTop: '1rem',
+        backgroundColor: 'transparent'
       }}>
         <img 
           src="/logo.png" 
           alt="البارحي" 
-          style={{ height: '100px', width: 'auto', marginBottom: '-5px' }} 
+          style={{ height: '140px', width: 'auto', marginBottom: '0' }} 
         />
         <button 
           onClick={() => setShowQR(true)}
