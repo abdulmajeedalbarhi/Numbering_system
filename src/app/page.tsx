@@ -133,11 +133,21 @@ export default function Home() {
 
   return (
     <main style={{ padding: '0.5rem 0.5rem' }}>
-      <header style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '1rem', paddingTop: '0.5rem' }}>
+      <header style={{ 
+        position: 'relative', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center', 
+        marginBottom: '1rem', 
+        paddingTop: '0.5rem',
+        backgroundColor: 'white',
+        borderRadius: '1.5rem',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+      }}>
         <img 
           src="/logo.png" 
           alt="البارحي" 
-          style={{ height: '90px', width: 'auto', marginBottom: '-10px' }} 
+          style={{ height: '100px', width: 'auto', marginBottom: '-5px' }} 
         />
         <button 
           onClick={() => setShowQR(true)}

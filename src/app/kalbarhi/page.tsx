@@ -54,12 +54,21 @@ export default function Admin() {
 
   return (
     <main style={{ maxWidth: '800px', padding: '0.5rem 0.5rem' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+      <header style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        marginBottom: '0.75rem',
+        backgroundColor: 'white',
+        padding: '0.5rem 0.75rem',
+        borderRadius: '1rem',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+      }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <Link href="/" style={{ textDecoration: 'none', fontSize: '1.25rem', padding: '0.4rem', background: '#f1f5f9', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             🏠
           </Link>
-          <img src="/logo.png" alt="البارحي" style={{ height: '50px', width: 'auto' }} />
+          <img src="/logo.png" alt="البارحي" style={{ height: '45px', width: 'auto' }} />
         </div>
         <button 
           onClick={() => setShowQR(true)}
