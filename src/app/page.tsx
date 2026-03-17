@@ -100,7 +100,7 @@ export default function Home() {
     if (!searchQuery) return;
 
     // Admin shortcut
-    if (searchQuery.toLowerCase() === 'kab') {
+    if (searchQuery.toLowerCase() === 'hsb@123') {
       router.push('/kalbarhi');
       return;
     }
