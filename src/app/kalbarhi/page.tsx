@@ -144,7 +144,23 @@ export default function Admin() {
             <tbody>
               {state.bookings.filter((b: any) => b.id > state.currentNumber).map((booking: any) => (
                 <tr key={booking.id} style={{ borderBottom: '1px solid var(--border)' }}>
-                  <td style={{ padding: '0.4rem', fontWeight: 800, fontSize: '0.85rem' }}>{booking.id}</td>
+                  <td style={{ padding: '0.4rem', fontWeight: 800, fontSize: '0.85rem' }}>
+                    {booking.id}
+                    {booking.isManual && (
+                      <span style={{ 
+                        fontSize: '0.6rem', 
+                        backgroundColor: 'var(--primary)', 
+                        color: 'white', 
+                        padding: '0.1rem 0.3rem', 
+                        borderRadius: '0.3rem', 
+                        marginRight: '0.4rem',
+                        fontWeight: 400,
+                        verticalAlign: 'middle'
+                      }}>
+                        يدوي
+                      </span>
+                    )}
+                  </td>
                   <td style={{ padding: '0.4rem', fontSize: '0.85rem' }}>{booking.name}</td>
                   <td style={{ padding: '0.4rem', fontSize: '0.85rem' }}>{booking.phone}</td>
                   <td style={{ padding: '0.4rem', textAlign: 'center' }}>
@@ -219,12 +235,28 @@ export default function Admin() {
             </div>
             <div className="form-group" style={{ marginBottom: '0.75rem' }}>
               <label style={{ fontSize: '0.85rem' }}>عدد التمصيرات</label>
-              <input 
-                type="number" 
-                value={editBooking.orders}
-                onChange={e => setEditBooking({...editBooking, orders: parseInt(e.target.value) || 1})}
-                style={{ padding: '0.4rem', fontSize: '0.9rem' }}
-              />
+              <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.4rem' }}>
+                {[1, 2, 3].map((num) => (
+                  <button
+                    key={num}
+                    type="button"
+                    onClick={() => setEditBooking({ ...editBooking, orders: num })}
+                    style={{
+                      flex: 1,
+                      padding: '0.4rem',
+                      borderRadius: '0.4rem',
+                      border: '1px solid var(--border)',
+                      backgroundColor: editBooking.orders === num ? 'var(--primary)' : 'white',
+                      color: editBooking.orders === num ? 'white' : 'var(--text)',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      fontSize: '0.85rem'
+                    }}
+                  >
+                    {num}
+                  </button>
+                ))}
+              </div>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               <button className="btn btn-primary" style={{ flex: 1, padding: '0.5rem', fontSize: '0.9rem' }} onClick={() => adminAction('edit', editBooking)}>حفظ</button>

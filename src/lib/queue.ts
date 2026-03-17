@@ -6,6 +6,7 @@ export interface Booking {
   phone: string;
   orders: string;
   timestamp: string;
+  isManual: boolean;
 }
 
 export interface QueueState {
@@ -29,7 +30,23 @@ const KV_KEY = 'kalbarhi_queue_state';
 export async function getQueueState(): Promise<QueueState> {
   try {
     const state = await kv.get<QueueState>(KV_KEY);
-    return state || DEFAULT_STATE;
+    if (!state) return DEFAULT_STATE;
+    
+    // Migration: ensure all bookings have isManual flag
+    let migrated = false;
+    state.bookings = state.bookings.map(b => {
+      if (b.isManual === undefined) {
+        migrated = true;
+        return { ...b, isManual: false };
+      }
+      return b;
+    });
+    
+    if (migrated) {
+      await saveQueueState(state);
+    }
+    
+    return state;
   } catch (err) {
     console.error('Failed to get queue state from KV', err);
     return DEFAULT_STATE;
@@ -47,6 +64,9 @@ export async function saveQueueState(state: QueueState): Promise<void> {
 export async function addBooking(name: string, phone: string, orders: number, preferredIds?: number[]): Promise<Booking[] | null> {
   const state = await getQueueState();
   if (!state.isOpen) return null;
+  
+  // Safety check for order limit
+  if (orders < 1 || orders > 3) return null;
   
   const existingIds = state.bookings.map(b => b.id);
   const newBookings: Booking[] = [];
@@ -67,6 +87,7 @@ export async function addBooking(name: string, phone: string, orders: number, pr
         phone,
         orders: orders.toString(),
         timestamp,
+        isManual: true,
       };
       state.bookings.push(booking);
       newBookings.push(booking);
@@ -91,6 +112,7 @@ export async function addBooking(name: string, phone: string, orders: number, pr
         phone,
         orders: orders.toString(),
         timestamp,
+        isManual: false,
       };
       state.bookings.push(booking);
       newBookings.push(booking);
@@ -155,10 +177,46 @@ export async function updateBooking(id: number, updates: Partial<Booking>): Prom
 export async function deleteBooking(id: number): Promise<boolean> {
   const state = await getQueueState();
   const initialLength = state.bookings.length;
-  state.bookings = state.bookings.filter(b => b.id !== id);
-  if (state.bookings.length !== initialLength) {
-    await saveQueueState(state);
-    return true;
+  
+  // Find the index of the booking to delete
+  const deleteIndex = state.bookings.findIndex(b => b.id === id);
+  if (deleteIndex === -1) return false;
+
+  // Remove the booking
+  state.bookings.splice(deleteIndex, 1);
+
+  // Shifting logic:
+  // We only shift automatic (isManual: false) bookings that are ahead of the current serving number.
+  const currentNum = state.currentNumber;
+  
+  // Identify manual bookings and their IDs to avoid overwriting them
+  const manualIds = new Set(state.bookings.filter(b => b.isManual).map(b => b.id));
+  
+  // Get all automatic bookings that are still in queue (ahead of current serving number)
+  const automaticToShift = state.bookings
+    .filter(b => !b.isManual && b.id > currentNum)
+    .sort((a, b) => a.id - b.id);
+
+  let nextAvailableId = currentNum + 1;
+  for (const booking of automaticToShift) {
+    // Find the next ID that isn't taken by a manual booking
+    while (manualIds.has(nextAvailableId)) {
+      nextAvailableId++;
+    }
+    booking.id = nextAvailableId;
+    nextAvailableId++;
   }
-  return false;
+
+  // Update lastBookingId based on the new state
+  if (state.bookings.length === 0) {
+    state.lastBookingId = state.currentNumber;
+  } else {
+    state.lastBookingId = Math.max(...state.bookings.map(b => b.id));
+  }
+
+  // Ensure bookings are always sorted by ID
+  state.bookings.sort((a, b) => a.id - b.id);
+
+  await saveQueueState(state);
+  return true;
 }

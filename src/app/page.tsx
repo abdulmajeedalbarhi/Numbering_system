@@ -292,16 +292,30 @@ export default function Home() {
                   </div>
                   <div className="form-group" style={{ marginBottom: '0.75rem' }}>
                     <label style={{ fontSize: '0.85rem' }}>عدد التمصيرات</label>
-                    <div className="order-counter" style={{ padding: '0.25rem' }}>
-                      <button type="button" className="counter-btn" style={{ width: '28px', height: '28px' }} onClick={() => {
-                        setFormData({...formData, orders: Math.max(1, formData.orders - 1)});
-                        setSelectedIds([]);
-                      }}>-</button>
-                      <span className="counter-value" style={{ fontSize: '1rem' }}>{formData.orders}</span>
-                      <button type="button" className="counter-btn" style={{ width: '28px', height: '28px' }} onClick={() => {
-                        setFormData({...formData, orders: formData.orders + 1});
-                        setSelectedIds([]);
-                      }}>+</button>
+                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.4rem' }}>
+                      {[1, 2, 3].map((num) => (
+                        <button
+                          key={num}
+                          type="button"
+                          onClick={() => {
+                            setFormData({ ...formData, orders: num });
+                            setSelectedIds([]);
+                          }}
+                          style={{
+                            flex: 1,
+                            padding: '0.5rem',
+                            borderRadius: '0.5rem',
+                            border: '1px solid var(--border)',
+                            backgroundColor: formData.orders === num ? 'var(--primary)' : 'white',
+                            color: formData.orders === num ? 'white' : 'var(--text)',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            transition: 'all 0.2s'
+                          }}
+                        >
+                          {num}
+                        </button>
+                      ))}
                     </div>
                   </div>
 
